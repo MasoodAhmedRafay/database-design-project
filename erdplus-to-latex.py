@@ -4,15 +4,22 @@ import json
 
 
 class Entity:
-    def __init__(self,name,ide,is_relation=False):
+    def __init__(self,name,ide,pos,relation=None):
         self.name = name
         self.id = ide
         self.attribs = []
-        self.is_relation = is_relation
+        self.rels = []
+        self.relation = relation
+        self.pos = pos
 
+    def is_relation(self):
+        return self.relation != None
     def add_attrib(self,attrib):
         self.attribs.append(attrib)
 
+    def add_relation(self, slotIndex, target):
+        self.rels.append((slotIndex, target))
+        
     def __repr__(self):
         s = f"{self.name}, {self.id}:\n"
         for a in self.attribs:
@@ -26,24 +33,31 @@ def entities(obj):
     for f in obj['shapes']:
         ide = f['details']['id']
         name= f['details']['name']
+        pos = (f['details']['x'] / 50, f['details']['y'] / 50)
         if f['type'] == "Entity":
-            entities.append(Entity(name,ide))
+            entities.append(Entity(name,ide,pos))
 
         if f['type'] == "Relationship":
-            e = Entity(name,ide)
-            e.is_relation = True
-            entities.append(e)
+            slots = f['details']['slots']
+            a = slots[0]['cardinality']
+            at = slots[0]['entityId']
+            b = slots[1]['cardinality']
+            bt = slots[1]['entityId']
+            entities.append(Entity(name, ide, pos, ((a,at), (b,bt))))
             
         if f['type'] == "Attribute":
-            attributes.append((name, ide))
+            attributes.append((name, ide, pos))
 
     for f in obj['connectors']:
+        source = f['source']
+        target = f['destination']
+        e = next(entity for entity in entities if entity.id == target)
+        
+           
         if f['type'] == "Connector":
-            source = f['source']
-            target = f['destination']
-            e = next(entity for entity in entities if entity.id == target)
-            attrib = next((n,i) for (n,i) in attributes if i == source)
+            attrib = next((n,i,p) for (n,i,p) in attributes if i == source)
             e.add_attrib(attrib)
+            
     return entities
 
 
@@ -51,22 +65,22 @@ def picture(ents):
     s = "\\begin{tikzpicture}[auto,node distance=1.5cm]\n"
     prevnode = None
     for e in ents:
-        t = 'entity' if e.is_relation else 'entity'
-        if prevnode == None:
-            pos = ""
-        else:
-            pos = f"[below right = of {prevnode}]"
-        s+= f"\\node[{t}] ({e.name}) {pos} { {e.name} }\n"
-        s+= "[grow=up, sibling distance=3cm]"
+        t = 'relationship' if e.is_relation() else 'entity'
+        pos = f" at {e.pos} "
+        s+= f"\\node[{t}] ({e.id}) {pos} { {e.name} };\n"
 
-        for (a,n) in e.attribs:
-            s+= "\n\t child {node[attribute] {" + a + "} }"
-        s+=";\n"
-        prevnode = e.name
+        for (a,n,p) in e.attribs:
+            s+= f"\\node[attribute] ({n}) at {p} { {a} };\n"
+            s+= f"\\draw[solid] ({e.id}) to ({n});\n"
 
+    for e in ents:
+        if e.is_relation():
+            ((a,at), (b,bt)) = e.relation
 
+            s+= f"\\draw[{b} to one] ({at}) to ({e.id});\n"
+            s+= f"\\draw[one to {a}] ({e.id}) to ({bt});\n"
+        
     s += "\end{tikzpicture}"
-
     
     return s
 
