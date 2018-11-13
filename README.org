@@ -2,7 +2,7 @@
 
 ** Diagram
    Made using erdplus.com standalone, exported to json-ish (through save)
-   Generated graph in \LaTeX through tikz
+   Generated graph in $\LaTeX$ through tikz
 
 ** Report
    Run make to regenerate diagram and export to pdf using pdflatex.
