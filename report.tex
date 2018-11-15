@@ -1,5 +1,7 @@
 \documentclass{article}
 
+\usepackage{hyperref}
+
 \usepackage{tikz}
 \usetikzlibrary{shapes.multipart}
 \usetikzlibrary{positioning}
@@ -44,10 +46,14 @@
     }
 }
 
+\newcommand{\email}[1]{\href{mailto:#1}{#1}}
+
 \title{Database Design Project}
 \author{
-  Samuel Grahn, samuel.grahn@outlook.com\\
-  Next Person, email@adress.com\\
+  Samuel Grahn, \email{samuel.grahn@outlook.com}\\
+  Olof Bergenholtz, \email{obergenholtz@gmail.com}\\
+  Masood Ahmed Rafay, \email{Rafayqureshi2010@gmail.com}\\
+  Ali Kamran, \email{alkmrn1@gmail.com}\\
 }
 
 
