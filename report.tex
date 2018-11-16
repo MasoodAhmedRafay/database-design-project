@@ -1,5 +1,7 @@
 \documentclass{article}
 
+\usepackage{hyperref}
+
 \usepackage{tikz}
 \usetikzlibrary{shapes.multipart}
 \usetikzlibrary{positioning}
@@ -44,9 +46,23 @@
     }
 }
 
+\newcommand{\email}[1]{\href{mailto:#1}{#1}}
+
+\title{Database Design Project}
+\author{
+  Samuel Grahn, \email{samuel.grahn@outlook.com}\\
+  Olof Bergenholtz, \email{obergenholtz@gmail.com}\\
+  Masood Ahmed Rafay, \email{Rafayqureshi2010@gmail.com}\\
+  Ali Kamran, \email{alkmrn1@gmail.com}\\
+}
+
 
 \begin{document}
 
-\input{diag.tex}
+\maketitle
+\newpage
+\section*{ER-diagram}
+\includegraphics[width=\linewidth]{er.png}
+%\input{diag.tex}
 
 \end{document}
