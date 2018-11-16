@@ -1,6 +1,4 @@
-report.pdf: report.tex diagram.erdplus erdplus-to-latex.py
-	rm -f diag.tex
-	./erdplus-to-latex.py diagram.erdplus > diag.tex
+report.pdf: report.tex er.png
 	pdflatex report.tex
 
 show:
