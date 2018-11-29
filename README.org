@@ -1,0 +1,18 @@
+* Database Design Project
+To compile and show, run
+#+BEGIN_SRC bash
+  make
+  make show
+#+END_SRC
+
+SQL queries are in sql subfolder,
+in separate *.sql* files.
+
+Include them in LaTeX using
+#+BEGIN_SRC latex
+\sql{filename}
+#+END_SRC
+E.g, to include "sql/test.sql", write
+#+BEGIN_SRC latex
+\sql{test}
+#+END_SRC
