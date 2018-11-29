@@ -1,52 +1,12 @@
 \documentclass{article}
 
 \usepackage{hyperref}
-
-\usepackage{tikz}
-\usetikzlibrary{shapes.multipart}
-\usetikzlibrary{positioning}
-\usetikzlibrary{shadows}
-\usetikzlibrary{er}
-\usetikzlibrary{calc}
-
-\makeatletter
-\pgfarrowsdeclare{crow's foot}{crow's foot}
-{
-  \pgfarrowsleftextend{+-.5\pgflinewidth}%
-  \pgfarrowsrightextend{+.5\pgflinewidth}%
-}
-{
-  \pgfutil@tempdima=0.5pt%
-  \advance\pgfutil@tempdima by.25\pgflinewidth%
-  \pgfsetdash{}{+0pt}%
-  \pgfsetmiterjoin%
-  \pgfpathmoveto{\pgfqpoint{0pt}{-6\pgfutil@tempdima}}%
-  \pgfpathlineto{\pgfqpoint{-6\pgfutil@tempdima}{0pt}}%
-  \pgfpathlineto{\pgfqpoint{0pt}{6\pgfutil@tempdima}}%
-  \pgfusepathqstroke%
-}
-
-
-\tikzset{
-    zig zag to/.style={
-        to path={(\tikztostart) -| ($(\tikztostart)!#1!(\tikztotarget)$) |- (\tikztotarget)}
-    },
-    zig zag to/.default=0.5,
-    one to one/.style={
-      solid
-    },
-    one to many/.style={
-        -crow's foot, solid
-    },
-    many to one/.style={
-        crow's foot-, solid
-    },
-    many to many/.style={
-        crow's foot-crow's foot, solid
-    }
-}
-
+\usepackage{listings}
+\usepackage{graphicx}
 \newcommand{\email}[1]{\href{mailto:#1}{#1}}
+
+\newcommand{\sql}[1]{\lstinputlisting[language=sql]{sql/#1.sql}}
+
 
 \title{
   Database Design Project\\
@@ -59,13 +19,24 @@
   Ali Kamran, \email{alkmrn1@gmail.com}\\
 }
 
-
 \begin{document}
 
 \maketitle
 \newpage
 \section*{ER-diagram}
 \includegraphics[height=\linewidth,angle=90]{er.png}
-%\input{diag.tex}
+
+\section*{Task 4 Queries}
+Welcome Text
+\sql{welcome}
+List of top-level departments
+
+List of featured products
+
+List all keyword-related producs to a product
+
+List all products in a given department
+
+List all products on sale sorted by discount percentage
 
 \end{document}
