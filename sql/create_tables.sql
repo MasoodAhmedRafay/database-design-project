@@ -1,0 +1,165 @@
+CREATE TABLE `fall18_project_it30`.`users` (
+  `id` INT NOT NULL AUTO_INCREMENT,
+  `ssn` INT(10) NOT NULL,
+  `email` VARCHAR(45) NOT NULL,
+  `password` VARCHAR(45) NULL,
+  `last_name` VARCHAR(45) NULL,
+  `first_name` VARCHAR(45) NULL,
+  `house_no` VARCHAR(45) NULL,
+  `street` VARCHAR(45) NULL,
+  `postal_code` VARCHAR(45) NULL,
+  `contact_no` VARCHAR(45) NULL,
+  PRIMARY KEY (`id`, `ssn`, `email`),
+  UNIQUE INDEX `id_UNIQUE` (`id` ASC),
+  UNIQUE INDEX `SSN_UNIQUE` (`ssn` ASC),
+  UNIQUE INDEX `email_UNIQUE` (`email` ASC));
+
+  
+  
+CREATE TABLE `fall18_project_it30`.`departments` (
+  `id` INT NOT NULL AUTO_INCREMENT,
+  `name` VARCHAR(100) NOT NULL,
+  `short_description` VARCHAR(45) NULL,
+  `detail_description` VARCHAR(45) NULL,
+  `parent_id` INT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE INDEX `id_UNIQUE` (`id` ASC));
+
+
+CREATE TABLE `fall18_project_it30`.`products` (
+  `id` INT NOT NULL AUTO_INCREMENT,
+  `name` VARCHAR(100) NULL,
+  `base_price` DOUBLE NULL,
+  `tax%` DECIMAL NULL,
+  `price_incl._tax` FLOAT NULL,
+  `price_excl._tax` DOUBLE NULL,
+  `stock_count` REAL NULL,
+  `short_description` VARCHAR(500) NULL,
+  `detail_description` VARCHAR(1000) NULL,
+  `featured` TINYINT NULL,
+  `hidden` TINYINT NULL,
+  `department_id` INT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE INDEX `id_UNIQUE` (`id` ASC));
+
+
+
+
+CREATE TABLE `fall18_project_it30`.`orders_mst` (
+  `id` INT NOT NULL AUTO_INCREMENT,
+  `placement_date` DATE NULL,
+  `payment_ref` VARCHAR(45) NULL,
+  `tracking_no` VARCHAR(14) NULL,
+  `status` TINYINT NULL,
+  `user_id` INT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE INDEX `id_UNIQUE` (`id` ASC));
+
+
+Create TABLE `fall18_project_it30`.`orders_detail` (
+ `order_id` INT NOT NULL ,
+ `product_id` INT NOT NULL ,
+ `quantity` INT NOT NULL ,
+ `price` DOUBLE NOT NULL ,
+ PRIMARY KEY orders_detail(`order_id`, `product_id`),
+ UNIQUE INDEX `product_id_UNIQUE` (`product_id` ASC));
+
+ 
+CREATE TABLE `fall18_project_it30`.`reviews` (
+  `text` VARCHAR(100) NULL,
+  `rating` TINYINT NULL,
+  `user_id` INT NOT NULL,
+  `product_id` INT NOT NULL,
+  CONSTRAINT `product_id`
+    FOREIGN KEY (`product_id`)
+    REFERENCES `fall18_project_it30`.`products`(`id`)
+    ON DELETE CASCADE
+    ON UPDATE RESTRICT,
+  CONSTRAINT `user_id`
+    FOREIGN KEY (`user_id`)
+    REFERENCES `fareviewsll18_project_it30`.`users` (`id`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION);
+
+	
+CREATE TABLE `fall18_project_it30`.`keywords` (
+  `id` INT NOT NULL AUTO_INCREMENT,
+  `text` VARCHAR(45) NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE INDEX `id_UNIQUE` (`id` ASC),
+  UNIQUE INDEX `text_UNIQUE` (`text` ASC));
+
+  
+  
+CREATE TABLE `fall18_project_it30`.`product_keyword` (
+  `keyword_id` INT NOT NULL,
+  `product_id` INT NOT NULL,
+  PRIMARY KEY (`keyword_id`, `product_id`),
+  UNIQUE INDEX `product_id_UNIQUE` (`product_id` ASC),
+  UNIQUE INDEX `keyword_id_UNIQUE` (`keyword_id` ASC),
+  CONSTRAINT `keyword_id`
+    FOREIGN KEY (`keyword_id`)
+    REFERENCES `fall18_project_it30`.`keywords` (`id`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+  CONSTRAINT `product_id`
+    FOREIGN KEY (`product_id`)
+    REFERENCES `fall18_project_it30`.`products` (`id`)
+    ON DELETE CASCADE
+    ON UPDATE RESTRICT);
+
+
+
+CREATE TABLE `fall18_project_it30`.`product_keyword` (
+  `keyword_id` INT NOT NULL,
+  `product_id` INT NOT NULL,
+  PRIMARY KEY (`keyword_id`, `product_id`),
+  UNIQUE INDEX `product_id_UNIQUE` (`product_id` ASC),
+  UNIQUE INDEX `keyword_id_UNIQUE` (`keyword_id` ASC),
+  CONSTRAINT `keyword_id`
+    FOREIGN KEY (`keyword_id`)
+    REFERENCES `fall18_project_it30`.`keywords` (`id`)
+    ON DELETE CASCADE
+    ON UPDATE RESTRICT);
+	
+
+--to be committed	
+ALTER TABLE `fall18_project_it30`.`orders_mst` 
+ADD COLUMN `last_modified` TIMESTAMP NULL AFTER `user_id`; 
+	
+----Departments---------	
+INSERT INTO `fall18_project_it30`.`departments` (`id`, `name`, `short_description`, `detail_description`) VALUES ('1', 'Electronics', 'Lorem ipsum dolor sit amet.', 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec sit.');
+INSERT INTO `fall18_project_it30`.`departments` (`id`, `name`, `short_description`, `detail_description`, `parent_id`) VALUES ('2', 'Computer and Electronics', 'Lorem ipsum dolor sit amet.', 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec sit.', '1');
+INSERT INTO `fall18_project_it30`.`departments` (`id`, `name`, `short_description`, `detail_description`, `parent_id`) VALUES ('3', 'TV and Videos', 'Lorem ipsum dolor sit amet.', 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec sit.', '1');
+INSERT INTO `fall18_project_it30`.`departments` (`id`, `name`, `short_description`, `detail_description`, `parent_id`) VALUES ('4', 'Desktop', 'Lorem ipsum dolor sit amet.', 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec sit.', '2');
+INSERT INTO `fall18_project_it30`.`departments` (`id`, `name`, `short_description`, `detail_description`, `parent_id`) VALUES ('5', 'Tablets', 'Lorem ipsum dolor sit amet.', 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec sit.', '2');
+INSERT INTO `fall18_project_it30`.`departments` (`id`, `name`, `short_description`, `detail_description`, `parent_id`) VALUES ('6', 'Laptops', 'Lorem ipsum dolor sit amet.', 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec sit.', '2');
+INSERT INTO `fall18_project_it30`.`departments` (`id`, `name`, `short_description`, `detail_description`, `parent_id`) VALUES ('7', 'TVs', 'Lorem ipsum dolor sit amet.', 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec sit.', '3');
+INSERT INTO `fall18_project_it30`.`departments` (`name`, `short_description`, `detail_description`, `parent_id`) VALUES ('Projectors', 'Lorem ipsum dolor sit amet.', 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec sit.', '3');
+INSERT INTO `fall18_project_it30`.`departments` (`name`, `short_description`, `detail_description`, `parent_id`) VALUES ('Accessories', 'Lorem ipsum dolor sit amet.', 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec sit.', '3');
+
+----Products---------
+INSERT INTO `fall18_project_it30`.`products` (`id`, `name`, `base_price`, `tax%`, `stock_count`, `featured`, `hidden`, `department_id`) VALUES ('1', 'HP 20-C102IL ( CDC, 4 GB, 1 TB, DOS)', '24,495', '', '20', '1', '0', '4');
+INSERT INTO `fall18_project_it30`.`products` (`id`, `name`, `base_price`, `tax%`, `stock_count`, `featured`, `hidden`, `department_id`) VALUES ('2', 'HP 280 G3 MT (Intel Pentium,4GB,500GB,DOS)', '21,495', '', '25', '1', '0', '4');
+INSERT INTO `fall18_project_it30`.`products` (`id`, `name`, `base_price`, `tax%`, `stock_count`, `featured`, `hidden`, `department_id`) VALUES ('3', 'LG 32LK526BPTA 32 Inch HD Ready Smart LED TV', '15,259', '', '12', '0', '0', '7');
+INSERT INTO `fall18_project_it30`.`products` (`id`, `name`, `base_price`, `tax%`, `stock_count`, `featured`, `hidden`, `department_id`) VALUES ('4', 'LG 32LK616BPTB 32 Inch 4K Ultra HD Smart LED TV', '23,177', '', '14', '0', '0', '7');
+INSERT INTO `fall18_project_it30`.`products` (`id`, `name`, `base_price`, `tax%`, `stock_count`, `featured`, `hidden`, `department_id`) VALUES ('5', 'Apple iPad 6 (Wi-Fi)', '22,997', '', '13', '0', '0', '5');
+INSERT INTO `fall18_project_it30`.`products` (`id`, `name`, `base_price`, `tax%`, `stock_count`, `featured`, `hidden`, `department_id`) VALUES ('6', 'Apple iPad 9.7 128GB (Wi-Fi)', '21,416', '', '16', '0', '1', '5');
+INSERT INTO `fall18_project_it30`.`products` (`id`, `name`, `base_price`, `tax%`, `stock_count`, `featured`, `hidden`, `department_id`) VALUES ('7', 'Apple MQD32HN/A MacBook Air (13.3 Inch|Core I5|8 GB|Mac OS)', '58,897', '', '25', '1', '0', '6');
+INSERT INTO `fall18_project_it30`.`products` (`id`, `name`, `base_price`, `tax%`, `stock_count`, `featured`, `hidden`, `department_id`) VALUES ('8', 'Apple MPXQ2 MacBook Pro (13 Inch|Core I5|8 GB|Mac OS)', '99,699', '', '35', '1', '0', '6');
+INSERT INTO `fall18_project_it30`.`products` (`id`, `name`, `base_price`, `tax%`, `stock_count`, `featured`, `hidden`, `department_id`) VALUES ('9', 'HP (15Q-BU015TU) Laptop (15.6 Inch|8 GB|Win 10 Home|1 TB)', '21,591', '', '43', '1', '0', '6');
+INSERT INTO `fall18_project_it30`.`products` (`id`, `name`, `base_price`, `tax%`, `price_incl._tax`, `stock_count`, `featured`, `hidden`, `department_id`) VALUES ('10', 'HP 15-DA0326TU Laptop (15.6 Inch|Core I3|4 GB|Win 10 Home|1 TB)', '28,490', '', '', '65', '0', '1', '6');
+INSERT INTO `fall18_project_it30`.`products` (`tax%`, `stock_count`, `featured`) VALUES ('', '', '');
+
+
+-----------Users----------
+INSERT INTO `fall18_project_it30`.`users` (`id`, `ssn`, `email`, `password`, `last_name`, `first_name`, `house_no`, `street`, `postal_code`, `contact_no`) VALUES ('1', '1234567891', 'abc@123.com', '12345', 'John', 'Marshall', '12-A', 'Karlsrogatan', '75238', '00000000');
+INSERT INTO `fall18_project_it30`.`users` (`id`, `ssn`, `email`, `password`, `last_name`, `first_name`, `house_no`, `street`, `postal_code`, `contact_no`) VALUES ('2', '2345678910', '789@xyz.com', '67890', 'Robert', 'Greek', '13-A', 'Karlsrogatan', '75238', '11111111');
+
+
+----------reviews-----------
+INSERT INTO `fall18_project_it30`.`reviews` (`text`, `rating`, `user_id`, `product_id`) VALUES ('Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam orci enim, laoreet vel pharetra in, posuere vitae urna. Nam ac risus lacinia, lacinia ipsum a, tincidunt dui. Vivamus pulvinar, erat ac euismod euismod, sem diam lacinia lectus, in viverra urna erat ac augue. Duis lorem turpis, fermentum eu metus sit amet, ultrices eleifend ipsum. Etiam quis magna posuere, vulputate odio quis, elementum sem. Mauris condimentum tortor', '4', '1', '5');
+INSERT INTO `fall18_project_it30`.`reviews` (`text`, `rating`, `user_id`, `product_id`) VALUES ('Neque porro quisquam est qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit', '3', '2', '10');
+
+----------orders_mst------------
+INSERT INTO `fall18_project_it30`.`orders_mst` (`id`, `payment_ref`, `status`, `user_id`) VALUES ('1', 'abc-123', 'delivered', '1');
