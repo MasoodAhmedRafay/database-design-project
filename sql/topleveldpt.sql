@@ -1,1 +1,1 @@
-select name,description from departments where parent_id is null
+select name,short_description from departments where parent_id is null;
