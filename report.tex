@@ -27,6 +27,9 @@
 \section*{ER-diagram}
 \includegraphics[height=\linewidth,angle=90]{er.png}
 
+\section*{Generating the Database}
+\sql{table_generation}
+
 \section*{Task 4 Queries}
 Welcome Text
 \sql{welcome}
@@ -39,5 +42,22 @@ List all keyword-related producs to a product
 List all products in a given department
 \sql{dept_products}
 List all products on sale sorted by discount percentage
-TODO
+\sql{sale}
+
+\section*{Task 5 Indices}
+To improve the query for featured products, we create an index using\\
+\sql{indices}
+
+Running
+\sql{explain}
+before and after creating this index yields\\
+\begin{tabular}{ | c c c c c c c c c c | }
+  \hline
+  id & select\_type & table & type & possible\_keys & key & key\_len & ref & rows & extra\\
+  \hline
+  1 & SIMPLE & products & ALL & NULL & NULL & NULL & NULL & 11 & Using where\\
+  1 & SIMPLE & products & ref & featured\_idx & featured\_idx & 2 & const & 5 & NULL\\
+  \hline
+\end{tabular}
+
 \end{document}

@@ -1,6 +1,6 @@
-select name,short_description,`price_incl._tax`, avg(rating)
-from products
-inner join
+SELECT name,short_description,`price_incl._tax`, avg(rating)
+FROM products
+INNER JOIN
 reviews
-on id = product_id
-where department_id = 5;
+ON id = product_id
+WHERE department_id = n;
