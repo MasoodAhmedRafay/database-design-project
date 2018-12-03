@@ -1,1 +1,1 @@
-select name,description from departments where parent_id is null
+SELECT (name,short_description) FROM departments WHERE parent_id IS NULL;

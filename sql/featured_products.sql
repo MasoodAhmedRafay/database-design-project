@@ -1,2 +1,2 @@
-select p.name,p.'price_incl._tax',p.short_description
-from products as p where featured=true
+SELECT (name,`price_incl._tax`,short_description)
+FROM products WHERE featured=1;

@@ -1,5 +1,5 @@
-select * from products
-where id=
-      (select product_id from product_keyword where keyword_id =
-      	      (select keyword_id from product_keyword where product_id=given_id))
-and id != given_id
+SELECT (name, `price_incl._tax`, short_description) from products
+INNER JOIN product_keywords on id = product_id
+where keyword_id IN (
+      SELECT keyword_id FROM product_keywords WHERE product_id = n)
+group by product_id;
