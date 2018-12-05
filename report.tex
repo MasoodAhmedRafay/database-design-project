@@ -60,4 +60,72 @@ before and after creating this index yields\\
   \hline
 \end{tabular}
 
+\section*{Task 6 Questions}
+
+\section{Table relations and FDs}
+
+\subsection{User(id, ssn, email, password, name, address, contact\_no)}
+
+candidate keys: {id}, {ssn}, {email}
+
+name is a composite attribute of first\_name and last\_name
+
+
+
+address is a composite attribute of street, house\_number and postal\_code
+
+
+Functional dependency:\\\\
+
+id $\rightarrow$ ssn, email, password, name, address, contact\_no
+
+ssn $\rightarrow$ id, email, password, name, address, contact\_no
+
+email $\rightarrow$ id, ssn, password, name, address, contact\_no
+
+Normalization: It is not 1NF since we are using composite attributes name and address. Since 1NF is not upheld, neither is 2NF or 3NF.
+
+
+
+\section{Product(id, name, url, price, stock\_count, short\_desc, detailed\_desc, features, hidden)}
+
+candidate key: {id}
+
+price is a composite attribute of discount, tax, base\_price, price\_excl\_tax, price\_incl\_tax
+
+
+
+Functional dependency:
+
+id $\rightarrow$ name, url, price, stock\_count, short\_desc, detailed\_desc, features, hidden
+
+
+short\_desc $\rightarrow$ detailed\_desc
+
+
+base\_price $\rightarrow$ price, price\_excl\_tax,
+price\_incl\_tax
+
+
+tax  $\rightarrow$ price, price\_incl\_tax
+
+Normalization: It is not 1NF since we are using composite attributes name and address. Since 1NF is not upheld, neither is 2NF or 3NF.
+
+
+
+
+\section{Review(product\_id, user\_id, text, rating)}
+
+
+candidate key: {product\_id, user\_id}
+
+product\_id and user\_id are foreign keys.
+
+
+Functional dependency:
+
+product\_id, user\_id $\rightarrow$ text, rating
+
+Normalization: It is not 1NF since text is not atomic. Since 1NF is not upheld, neither is 2NF or 3NF.
+
 \end{document}
