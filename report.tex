@@ -1,6 +1,6 @@
 
 \documentclass{article}
-
+\usepackage{enumerate}
 \usepackage{hyperref}
 \usepackage{listings}
 \usepackage{graphicx}
@@ -64,9 +64,9 @@ before and after creating this index yields\\
 
 \section{Table relations and FDs}
 
-\subsection{User(id, ssn, email, password, name, address, contact\_no)}
-
-candidate keys: {id}, {ssn}, {email}
+\subsection{User}
+(id, ssn, email, password, name, address, contact\_no)\\\\
+\textbf{Candidate keys}: {id}, {ssn}, {email}
 
 name is a composite attribute of first\_name and last\_name
 
@@ -75,57 +75,53 @@ name is a composite attribute of first\_name and last\_name
 address is a composite attribute of street, house\_number and postal\_code
 
 
-Functional dependency:\\\\
-
+\subsubsection*{Functional dependency}
+\begin{enumerate}[$\bullet$]
+  \item
 id $\rightarrow$ ssn, email, password, name, address, contact\_no
-
+\item
 ssn $\rightarrow$ id, email, password, name, address, contact\_no
-
+\item
 email $\rightarrow$ id, ssn, password, name, address, contact\_no
+\end{enumerate}
+\subsubsection*{Normalization}
+It is not 1NF since we are using composite attributes name and address. Since 1NF is not upheld, neither is 2NF or 3NF.
 
-Normalization: It is not 1NF since we are using composite attributes name and address. Since 1NF is not upheld, neither is 2NF or 3NF.
 
 
-
-\section{Product(id, name, url, price, stock\_count, short\_desc, detailed\_desc, features, hidden)}
-
-candidate key: {id}
-
+\section{Product}
+(id, name, url, price, stock\_count, short\_desc, detailed\_desc, features, hidden)\\\\
+\textbf{Candidate Key}: id
 price is a composite attribute of discount, tax, base\_price, price\_excl\_tax, price\_incl\_tax
 
 
-
-Functional dependency:
-
+\subsubsection*{Functional dependency}
+\begin{enumerate}[$\bullet$]
+\item
+  
 id $\rightarrow$ name, url, price, stock\_count, short\_desc, detailed\_desc, features, hidden
-
-
+\item
 short\_desc $\rightarrow$ detailed\_desc
 
-
+\item
 base\_price $\rightarrow$ price, price\_excl\_tax,
 price\_incl\_tax
 
-
+\item
 tax  $\rightarrow$ price, price\_incl\_tax
-
-Normalization: It is not 1NF since we are using composite attributes name and address. Since 1NF is not upheld, neither is 2NF or 3NF.
-
-
-
-
-\section{Review(product\_id, user\_id, text, rating)}
+\end{enumerate}
+\subsubsection*{Normalization}
+It is not 1NF since we are using composite attribute price. Since 1NF is not upheld, neither is 2NF or 3NF
 
 
-candidate key: {product\_id, user\_id}
-
+\section{Review}
+(product\_id, user\_id, text, rating)\\\\
+\textbf{Candidate Key}: {product\_id, user\_id}
 product\_id and user\_id are foreign keys.
 
-
-Functional dependency:
-
+\subsubsection*{Functional dependency}
 product\_id, user\_id $\rightarrow$ text, rating
-
-Normalization: It is not 1NF since text is not atomic. Since 1NF is not upheld, neither is 2NF or 3NF.
+\subsubsection*{Normalization}
+It is not 1NF since text is not atomic. Since 1NF is not upheld, neither is 2NF or 3NF.
 
 \end{document}

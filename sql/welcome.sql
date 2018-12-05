@@ -1,1 +1,1 @@
-select message from random_strings
+select short_description from departments where id = 1;
