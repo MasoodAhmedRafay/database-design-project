@@ -16,3 +16,13 @@ E.g, to include "sql/test.sql", write
 #+BEGIN_SRC latex
 \sql{test}
 #+END_SRC
+
+** Python
+Make sure to have mysqldb installed
+
+If not on school network, create a ssh-tunnel
+#+BEGIN_SRC bash
+ssh -L 3306:back.db1.course.it.uu.se:3306 -o TCPKeepAlive=yes -o ServerAliveInterval=10 user1234@berzelius.it.uu.se -N
+#+END_SRC
+
+Where user1234 is your username.
