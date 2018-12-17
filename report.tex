@@ -127,4 +127,82 @@ product\_id, user\_id $\rightarrow$ text, rating
 \subsubsection*{Normalization}
 It is not 1NF since text is not atomic. Since 1NF is not upheld, neither is 2NF or 3NF.
 
+
+
+
+
+\section*{Task 7 SOURCE CODE OF THE PROGRAMS}
+Source code of the Programs
+
+\subsubsection*{PRODUCTS}
+
+import MySQLdb
+
+\begin{verbatim}
+conn = MySQLdb.connect("127.0.0.1", "fall18_it30", "m8kSinOD", "fall18_project_it30")
+
+cur = conn.cursor()
+
+dept = input("Enter Department ID: ")
+
+
+cur.execute("""
+SELECT name
+FROM departments
+WHERE parent_id=%s
+""",(dept,))
+
+
+if cur.rowcount == 0:
+    cur.execute("""
+    SELECT name
+    FROM products
+    WHERE department_id=%s
+    """, (dept,))
+
+for row in cur:
+    print(row)
+
+
+cur.close()
+
+conn.close()
+    
+\end{verbatim}
+
+\subsubsection*{DISCOUNT}
+\begin{verbatim}
+
+import MySQLdb
+
+conn = MySQLdb.connect("127.0.0.1", "fall18_it30", "m8kSinOD", "fall18_project_it30")
+conn.autocommit(True)
+cur = conn.cursor()
+
+prod = input("Enter Product ID: ")
+
+cur.execute("""
+SELECT name, discount
+FROM products
+WHERE id=%s
+""",(prod,))
+
+if cur.rowcount == 0:
+    print("No such product")
+else:
+    for row in cur:
+        print(row)
+
+    newdisc = input("Enter new discount (empty for no change): ")
+    if newdisc != "":
+        print("Updated!")
+        cur.execute("""
+        UPDATE products
+        SET discount=%s
+        WHERE id=%s
+        """, (newdisc,prod))
+
+    
+\end{verbatim}
+
 \end{document}
