@@ -1,52 +1,208 @@
+
 \documentclass{article}
+\usepackage{enumerate}
+\usepackage{hyperref}
+\usepackage{listings}
+\usepackage{graphicx}
+\newcommand{\email}[1]{\href{mailto:#1}{#1}}
 
-\usepackage{tikz}
-\usetikzlibrary{shapes.multipart}
-\usetikzlibrary{positioning}
-\usetikzlibrary{shadows}
-\usetikzlibrary{er}
-\usetikzlibrary{calc}
+\newcommand{\sql}[1]{\lstinputlisting[language=sql]{sql/#1.sql}}
 
-\makeatletter
-\pgfarrowsdeclare{crow's foot}{crow's foot}
-{
-  \pgfarrowsleftextend{+-.5\pgflinewidth}%
-  \pgfarrowsrightextend{+.5\pgflinewidth}%
+
+\title{
+  Database Design Project\\
+  IT 30
 }
-{
-  \pgfutil@tempdima=0.5pt%
-  \advance\pgfutil@tempdima by.25\pgflinewidth%
-  \pgfsetdash{}{+0pt}%
-  \pgfsetmiterjoin%
-  \pgfpathmoveto{\pgfqpoint{0pt}{-6\pgfutil@tempdima}}%
-  \pgfpathlineto{\pgfqpoint{-6\pgfutil@tempdima}{0pt}}%
-  \pgfpathlineto{\pgfqpoint{0pt}{6\pgfutil@tempdima}}%
-  \pgfusepathqstroke%
+\author{
+  Samuel Grahn, \email{samuel.grahn@outlook.com}\\
+  Olof Bergenholtz, \email{obergenholtz@gmail.com}\\
+  Masood Ahmed Rafay, \email{Rafayqureshi2010@gmail.com}\\
+  Ali Kamran, \email{alkmrn1@gmail.com}\\
 }
-
-
-\tikzset{
-    zig zag to/.style={
-        to path={(\tikztostart) -| ($(\tikztostart)!#1!(\tikztotarget)$) |- (\tikztotarget)}
-    },
-    zig zag to/.default=0.5,
-    one to one/.style={
-      solid
-    },
-    one to many/.style={
-        -crow's foot, solid
-    },
-    many to one/.style={
-        crow's foot-, solid
-    },
-    many to many/.style={
-        crow's foot-crow's foot, solid
-    }
-}
-
 
 \begin{document}
 
-\input{diag.tex}
+\maketitle
+\newpage
+\section*{ER-diagram}
+\includegraphics[height=\linewidth,angle=90]{er.png}
+
+\section*{Generating the Database}
+\sql{creation}
+
+\section*{Reverse-engineered Diagram}
+\includegraphics[width=\linewidth]{index.jpg}
+\newpage
+\section*{Task 4 Queries}
+Welcome Text
+\sql{welcome}
+List of top-level departments
+\sql{topleveldpt}
+List of featured products
+\sql{featured_products}
+List all keyword-related producs to a product
+\sql{similar_products}
+List all products in a given department
+\sql{dept_products}
+List all products on sale sorted by discount percentage
+\sql{sale}
+
+\section*{Task 5 Indices}
+To improve the query for featured products, we create an index using\\
+\sql{indices}
+
+Running
+\sql{explain}
+before and after creating this index yields\\
+\begin{tabular}{ | c c c c c c c c c c | }
+  \hline
+  id & select\_type & table & type & possible\_keys & key & key\_len & ref & rows & extra\\
+  \hline
+  1 & SIMPLE & products & ALL & NULL & NULL & NULL & NULL & 11 & Using where\\
+  1 & SIMPLE & products & ref & featured\_idx & featured\_idx & 2 & const & 5 & NULL\\
+  \hline
+\end{tabular}
+
+\section*{Task 6 Questions}
+
+\section{Table relations and FDs}
+
+\subsection{User}
+(id, ssn, email, password, name, address, contact\_no)\\\\
+\textbf{Candidate keys}: {id}, {ssn}, {email}
+
+name is a composite attribute of first\_name and last\_name
+
+
+
+address is a composite attribute of street, house\_number and postal\_code
+
+
+\subsubsection*{Functional dependency}
+\begin{enumerate}[$\bullet$]
+  \item
+id $\rightarrow$ ssn, email, password, name, address, contact\_no
+\item
+ssn $\rightarrow$ id, email, password, name, address, contact\_no
+\item
+email $\rightarrow$ id, ssn, password, name, address, contact\_no
+\end{enumerate}
+\subsubsection*{Normalization}
+It is not 1NF since we are using composite attributes name and address. Since 1NF is not upheld, neither is 2NF or 3NF.
+
+
+
+\section{Product}
+(id, name, url, price, stock\_count, short\_desc, detailed\_desc, features, hidden)\\\\
+\textbf{Candidate Key}: id
+price is a composite attribute of discount, tax, base\_price, price\_excl\_tax, price\_incl\_tax
+
+
+\subsubsection*{Functional dependency}
+\begin{enumerate}[$\bullet$]
+\item
+  
+id $\rightarrow$ name, url, price, stock\_count, short\_desc, detailed\_desc, features, hidden
+\item
+short\_desc $\rightarrow$ detailed\_desc
+
+\item
+base\_price $\rightarrow$ price, price\_excl\_tax,
+price\_incl\_tax
+
+\item
+tax  $\rightarrow$ price, price\_incl\_tax
+\end{enumerate}
+\subsubsection*{Normalization}
+It is not 1NF since we are using composite attribute price. Since 1NF is not upheld, neither is 2NF or 3NF
+
+
+\section{Review}
+(product\_id, user\_id, text, rating)\\\\
+\textbf{Candidate Key}: {product\_id, user\_id}
+product\_id and user\_id are foreign keys.
+
+\subsubsection*{Functional dependency}
+product\_id, user\_id $\rightarrow$ text, rating
+\subsubsection*{Normalization}
+It is not 1NF since text is not atomic. Since 1NF is not upheld, neither is 2NF or 3NF.
+
+
+
+
+
+\section*{Task 7 SOURCE CODE OF THE PROGRAMS}
+Source code of the Programs
+
+\subsubsection*{PRODUCTS}
+
+import MySQLdb
+
+\begin{verbatim}
+conn = MySQLdb.connect("127.0.0.1", "fall18_it30", "m8kSinOD", "fall18_project_it30")
+
+cur = conn.cursor()
+
+dept = input("Enter Department ID: ")
+
+
+cur.execute("""
+SELECT name
+FROM departments
+WHERE parent_id=%s
+""",(dept,))
+
+
+if cur.rowcount == 0:
+    cur.execute("""
+    SELECT name
+    FROM products
+    WHERE department_id=%s
+    """, (dept,))
+
+for row in cur:
+    print(row)
+
+
+cur.close()
+
+conn.close()
+    
+\end{verbatim}
+
+\subsubsection*{DISCOUNT}
+\begin{verbatim}
+
+import MySQLdb
+
+conn = MySQLdb.connect("127.0.0.1", "fall18_it30", "m8kSinOD", "fall18_project_it30")
+conn.autocommit(True)
+cur = conn.cursor()
+
+prod = input("Enter Product ID: ")
+
+cur.execute("""
+SELECT name, discount
+FROM products
+WHERE id=%s
+""",(prod,))
+
+if cur.rowcount == 0:
+    print("No such product")
+else:
+    for row in cur:
+        print(row)
+
+    newdisc = input("Enter new discount (empty for no change): ")
+    if newdisc != "":
+        print("Updated!")
+        cur.execute("""
+        UPDATE products
+        SET discount=%s
+        WHERE id=%s
+        """, (newdisc,prod))
+
+    
+\end{verbatim}
 
 \end{document}
